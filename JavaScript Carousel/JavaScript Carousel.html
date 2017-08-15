@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>JavaScript Carousel</title>
+	<link href="style.css" rel="stylesheet">
+</head>
+
+
+<body>
+
+<div class="carousel-container">
+	<h2>Simple JavaScript Carousel</h2>
+	<div class="slides fade">
+		<img src="la.jpg" style="width:100%">
+	</div>
+
+	<div class="slides fade">
+		<img src="ny.jpg" style="width:100%">
+	</div>
+
+	<div class="slides fade">
+		<img src="chicago.jpg" style="width:100%">
+	</div>
+
+	<a class="prev" onclick="nextSlide(-1)">&#10094;</a>
+	<a class="next" onclick="nextSlide(1)">&#10095;</a>
+	
+	<div class="dot-p" style="text-align:center">
+	    <span class="dot" onclick="changeSlide(1)"></span> 
+	    <span class="dot" onclick="changeSlide(2)"></span> 
+	    <span class="dot" onclick="changeSlide(3)"></span> 
+    </div>
+</div>
+
+
+<script>
+	var slideIndex = 1;
+	slideShow(slideIndex);
+	var slideInterval = setInterval(autoSlide,3000);
+
+	function autoSlide() {
+	  currentSlide(slideIndex+1);
+
+	}
+
+	function nextSlide(n) {
+	  slideShow(slideIndex += n);
+	  clearInterval(slideInterval);
+	  slideInterval = setInterval(autoSlide,3000);
+	}
+
+	function changeSlide(n){
+	  slideShow(slideIndex = n);
+	  clearInterval(slideInterval);
+	  slideInterval = setInterval(autoSlide,3000);
+	}
+
+	function currentSlide(n) {
+	  slideShow(slideIndex = n);
+	}
+
+	function slideShow(n) {
+	  var i;
+	  var slides = document.getElementsByClassName("slides");
+	  var dots = document.getElementsByClassName("dot");
+
+	  if (n > slides.length) {
+	  	slideIndex = 1;
+	  }
+
+	  if (n < 1) {
+	  	slideIndex = slides.length;
+	  }
+	  //clear slides
+	  for (i = 0; i < slides.length; i++) {
+	      slides[i].style.display = "none";  
+	  }
+
+	  //clear dots
+	  for (i = 0; i < dots.length; i++) {
+	      dots[i].className = dots[i].className.replace(" active", "");
+	  }
+
+	  //display the current slide and active dot
+	  slides[slideIndex-1].style.display = "block";  
+	  dots[slideIndex-1].className += " active";
+	}
+
+</script>
+
+</body>
+</html>
+
