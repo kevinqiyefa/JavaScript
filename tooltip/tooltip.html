@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Tooltip - Custom Styling</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+ 
+    $( document ).tooltip({
+      position: {
+        my: "center bottom-3",
+        at: "center top",
+        using: function( position, feedback ) {
+          $( this ).css( position );
+          $( "<div>" )
+            .addClass( "arrow" )
+            .addClass( feedback.vertical )
+            .addClass( feedback.horizontal )
+            .appendTo( this );
+        }
+      }
+    });
+  } );
+  $( function()
+{
+    var targets = $( '[rel~=tooltip]' ),
+        target  = false,
+        tooltip = false,
+        title   = false;
+ 
+    targets.bind( 'mouseenter', function()
+    {
+        target  = $( this );
+        tip     = target.attr( 'title' );
+        tooltip = $( '<div id="tooltip"></div>' );
+ 
+        if( !tip || tip == '' )
+            return false;
+ 
+        target.removeAttr( 'title' );
+        tooltip.css( 'opacity', 0 )
+               .html( tip )
+               .appendTo( 'body' );
+ 
+        var init_tooltip = function()
+        {
+            if( $( window ).width() < tooltip.outerWidth() * 1.5 )
+                tooltip.css( 'max-width', $( window ).width() / 2 );
+            else
+                tooltip.css( 'max-width', 340 );
+ 
+            var pos_left = target.offset().left + ( target.outerWidth() / 2 ) - ( tooltip.outerWidth() / 2 ),
+                pos_top  = target.offset().top - tooltip.outerHeight() - 20;
+ 
+            if( pos_left < 0 )
+            {
+                pos_left = target.offset().left + target.outerWidth() / 2 - 20;
+                tooltip.addClass( 'left' );
+            }
+            else
+                tooltip.removeClass( 'left' );
+ 
+            if( pos_left + tooltip.outerWidth() > $( window ).width() )
+            {
+                pos_left = target.offset().left - tooltip.outerWidth() + target.outerWidth() / 2 + 20;
+                tooltip.addClass( 'right' );
+            }
+            else
+                tooltip.removeClass( 'right' );
+ 
+            if( pos_top < 0 )
+            {
+                var pos_top  = target.offset().top + target.outerHeight();
+                tooltip.addClass( 'top' );
+            }
+            else
+                tooltip.removeClass( 'top' );
+ 
+            tooltip.css( { left: pos_left, top: pos_top } )
+                   .animate( { top: '+=10', opacity: 1 }, 50 );
+        };
+ 
+        init_tooltip();
+        $( window ).resize( init_tooltip );
+ 
+        var remove_tooltip = function()
+        {
+            tooltip.animate( { top: '-=10', opacity: 0 }, 50, function()
+            {
+                $( this ).remove();
+            });
+ 
+            target.attr( 'title', tip );
+        };
+ 
+        target.bind( 'mouseleave', remove_tooltip );
+        tooltip.bind( 'click', remove_tooltip );
+    });
+});
+  </script>
+  <style>
+         #tooltip
+        {
+            text-align: left;
+            color: white;
+            font: 16px "Century Gothic", Sans-Serif;
+            background: #00AAFF;
+            position: absolute;
+            z-index: 100;
+            padding: 8px;
+            white-space: pre-wrap;
+        }
+        #tooltip:after /* triangle decoration */
+        {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #00AAFF;
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            margin-left: -10px;
+        }
+ 
+        #tooltip.top:after
+        {
+            border-top-color: transparent;
+            border-bottom: 10px solid #00AAFF;
+            top: -20px;
+            bottom: auto;
+        }
+ 
+        #tooltip.left:after
+        {
+            left: 20%;
+            margin: 0;
+        }
+ 
+        #tooltip.right:after
+        {
+            right: 10px;
+            left: auto;
+            margin: 0;
+        }
+  </style>
+</head>
+<body>
+
+<br>
+<abbr style="font-size:115%;font-family:Century Gothic;">
+<b></b>
+<a href><b></b></a>
+<br>
+<b></b> <a href=><b></b></a>  <a href=><b></b></a>
+<p>
+
+<p>
+
+<b> </b>
+<a href=><b></b></a>
+<p></abbr> 
+<p> 
+<abbr title="1 Market Street (One Market Plaza)
+9am-11am
+4th Wednesday each month (except holidays)" rel="tooltip" style="font-size:100%;font-family:Century Gothic">1 Market Street (One Market Plaza)</abbr>
+
+<br />
+<abbr title="2 Harrison Street / 345 Spear Street (Hills Plaza)
+10am-12pm
+4th Wednesday each month (except holidays)" rel="tooltip" style="font-size:100%;font-family:Century Gothic">2 Harrison Street / 345 Spear Street (Hills Plaza)</abbr>
+
+<br />
+<abbr title="5 3rd Street
+9am-11am
+Feb 15, May 17, Aug 16, Nov 15" rel="tooltip" style="font-size:100%;font-family:Century Gothic">5 3rd Street</abbr>
+
+<br />
+<abbr title="20 California Street
+Call 415.829.2119" rel="tooltip" style="font-size:100%;font-family:Century Gothic">20 California Street</abbr>
+
+<br />
+<abbr title="50 Beale Street
+11am-1pm
+Apr 26, Jul 5, Sep 27, Dec 6" rel="tooltip" style="font-size:100%;font-family:Century Gothic">50 Beale Street</abbr>
+
+<br />
+<abbr title="55 Hawthorne Street
+11am-1pm
+May 11, Aug 17, Nov 8" rel="tooltip" style="font-size:100%;font-family:Century Gothic">55 Hawthorne Street</abbr>
+
+<br />
+<abbr title="60 Spear Street
+9am-11m
+Jun 22, Aug 24, Oct 26" rel="tooltip" style="font-size:100%;font-family:Century Gothic">60 Spear Street</abbr>
+
+<br />
+<abbr title="65 Battery Street
+10am-12pm
+Feb 14, May 9, Aug 8, Nov 14" rel="tooltip" style="font-size:100%;font-family:Century Gothic">65 Battery Street</abbr>
+
+<br />
+<abbr title="77 Battery Street
+10am-12pm
+Feb 14, May 9, Aug 8, Nov 14" rel="tooltip" style="font-size:100%;font-family:Century Gothic">77 Battery Street</abbr>
+
+<br />
+<abbr title="100 Bush Street
+10am-12pm
+Feb 14, May 9, Aug 8, Nov 14" rel="tooltip" style="font-size:100%;font-family:Century Gothic">100 Bush Street</abbr>
+
+<br />
+<abbr title="100 Pine Street
+9am-11am
+Jan 11, Mar 8, May 10, Jul 12, Sep 13, Nov 8" rel="tooltip" style="font-size:100%;font-family:Century Gothic">100 Pine Street</abbr>
+
+<br />
+<abbr title="115 Sansome Street
+10am-12pm
+Feb 1, Apr 5, Jun 7, Aug 2, Oct 4, Dec 6" rel="tooltip" style="font-size:100%;font-family:Century Gothic">115 Sansome Street</abbr>
+
+<br />
+<abbr title="135 Main Street
+9am-11am
+Jan 18, Mar 15, May 17, Jul 19, Sept 20, Nov 15" rel="tooltip" style="font-size:100%;font-family:Century Gothic">135 Main Street</abbr>
+
+<br />
+<abbr title="150 California Street
+9am-11am
+Feb 1, Apr 5, Jun 7, Aug 2, Oct 4, Dec 6" rel="tooltip" style="font-size:100%;font-family:Century Gothic">150 California Street</abbr>
+
+<br />
+<abbr title="150 Spear Street
+9am-11am
+Mar 29, Jun 1, Aug 30, Dec 7" rel="tooltip" style="font-size:100%;font-family:Century Gothic">150 Spear Street</abbr>
+
+<br />
+<abbr title="180 Sansome Street
+10am-12pm
+Feb 14, May 9, Aug 8, Nov 14" rel="tooltip" style="font-size:100%;font-family:Century Gothic">180 Sansome Street</abbr>
+
+<br />
+<abbr title="180 Sutter Street
+10am-12pm
+Jan 26, Mar 23 , May 25,  Jul 27, Sep 28 , Nov 17" rel="tooltip" style="font-size:100%;font-family:Century Gothic">180 Sutter Street</abbr>
+
+<br />
+<abbr title="201 Spear Street
+11am-1pm
+Jan 25, April 26, July 26, Oct 25"id="show-option32" rel="tooltip" style="font-size:100%;font-family:Century Gothic">201 Spear Street</abbr>
+
+<br />
+<abbr title="222 Kearny Street
+10am-12pm
+Feb 15, May 17, Aug 16, Nov 15" rel="tooltip" style="font-size:100%;font-family:Century Gothic">222 Kearny Street</abbr>
+
+<br />
+<abbr title="225 Bush Street
+9am-11am
+Jan 24, Mar 28, May 23, Jul 25, Sep 26, Nov 30" rel="tooltip" style="font-size:100%;font-family:Century Gothic">225 Bush Street</abbr>
+
+<br />
+<abbr title="250 Montgomery Street
+11am-1pm
+Jan 24, April 25, July 25, Oct 24" rel="tooltip" style="font-size:100%;font-family:Century Gothic">250 Montgomery Street</abbr>
+
+<br />
+<abbr title="300 California Street
+10am-12noon
+May 16, Aug 1, Oct 24" rel="tooltip" style="font-size:100%;font-family:Century Gothic">300 California Street</abbr>
+
+<br />
+<abbr title="300 Frank H.  Ogawa, Oakland
+11am-1pm
+Feb 8, May 8, Aug 9, Nov 6" rel="tooltip" style="font-size:100%;font-family:Century Gothic">300 Frank H.  Ogawa, Oakland</abbr>
+
+<br />
+<abbr title="300 Montgomery Street
+9am-11am
+Jan 17, Mar 21, May 16, July 18, Sep 19, Nov 21" rel="tooltip" style="font-size:100%;font-family:Century Gothic">300 Montgomery Street</abbr>
+
+<br />
+<abbr title="333 Bush Street
+9am-11am
+Jan 9, Mar 1, May 3, Jul 5, Sep 6, Nov 1" rel="tooltip" style="font-size:100%;font-family:Century Gothic">333 Bush Street</abbr>
+
+<br />
+<abbr title="345 California Street
+9am-11am
+Jan 19, Mar 16, May 18, July 20, Sep 21, Nov 16" rel="tooltip" style="font-size:100%;font-family:Century Gothic">345 California Street</abbr>
+
+<br />
+<abbr title="388 Market Street
+12pm-2pm
+Feb 7, May 2, Aug 1, Nov 7" rel="tooltip" style="font-size:100%;font-family:Century Gothic">388 Market Street</abbr>
+
+<br />
+<abbr title="400 Montgomery Street
+9am-11am
+Feb 14, April 13, Aug 8" rel="tooltip" style="font-size:100%;font-family:Century Gothic">400 Montgomery Street</abbr>
+
+
+
+<br />
+<abbr title="455 Market Street
+9am-11am
+On Call 415.829.2119" rel="tooltip" style="font-size:100%;font-family:Century Gothic">455 Market Street</abbr>
+
+<br />
+<abbr title="456 Montgomery Street
+10am-12am
+Feb 2, May 4, Aug 3, Nov 9" rel="tooltip" style="font-size:100%;font-family:Century Gothic">456 Montgomery Street</abbr>
+
+<br />
+<abbr title="505 Sansome Street
+9am-11am
+Feb 7, Apr 4, Jun 6, Aug 1, Oct 3, Dec 5" rel="tooltip" style="font-size:100%;font-family:Century Gothic">505 Sansome Street</abbr>
+
+<br />
+<abbr title="525 Market Street
+10am-12pm
+Feb 7, Apr 4, Jun 6, Aug 1, Oct 3, Dec 5" rel="tooltip" style="font-size:100%;font-family:Century Gothic">525 Market Street</abbr>
+
+<br />
+<abbr title="545 Sansome Street
+9am-11am
+Feb 7, Apr 4, Jun 6, Aug 1, Oct 3, Dec 5" rel="tooltip" style="font-size:100%;font-family:Century Gothic">545 Sansome Street</abbr>
+
+<br />
+<abbr title="550 Kearny Street
+11am-1pm
+Jan 19, Mar 16, May 18, July 20, Sep 21, Nov 16" rel="tooltip" style="font-size:100%;font-family:Century Gothic">550 Kearny Street</abbr>
+
+<br />
+<abbr title="555 12th Street, Oakland
+10am-12pm
+Feb 8, May 8, Aug 9, Nov 6" rel="tooltip" style="font-size:100%;font-family:Century Gothic">555 12th Street, Oakland</abbr>
+
+<br />
+<abbr title="555 Montgomery Street
+9am-11am
+Feb 9, May 25, Aug 10, Nov 9" rel="tooltip" style="font-size:100%;font-family:Century Gothic">555 Montgomery Street</abbr>
+
+<br />
+<abbr title="580 California Street
+9am-11am
+Jan 26, Mar 23 , May 25,  Jul 27, Sep 28 , Nov 17" rel="tooltip" style="font-size:100%;font-family:Century Gothic">580 California Street</abbr>
+
+<br />
+<abbr title="600 Montgomery Street
+9am-11am
+Feb 7, Apr 4, Jun 6, Aug 1, Oct 3, Dec 5" rel="tooltip" style="font-size:100%;font-family:Century Gothic">600 Montgomery Street</abbr>
+
+<br />
+<abbr title="601 California Street
+10am-12pm
+Feb 2, May 4, Aug 3, Nov 9" rel="tooltip" style="font-size:100%;font-family:Century Gothic">601 California Street</abbr>
+
+<br />
+<abbr title="631 Howard Street
+9am-11am
+Aug 17, Nov 8" rel="tooltip" style="font-size:100%;font-family:Century Gothic">631 Howard Street</abbr>
+
+<br />
+<abbr title="650 California Street
+11am-1pm
+Jan 17, Mar 21, Mar 28, May 16, July 18, Sep 19, Nov 21" rel="tooltip" style="font-size:100%;font-family:Century Gothic">650 California Street</abbr>
+
+<br />
+<abbr title="650 Townsend Street
+10am-12pm
+Jan 5, Apr 6, Jul 6, Oct 5" rel="tooltip" style="font-size:100%;font-family:Century Gothic">650 Townsend Street</abbr>
+<br />
+
+<abbr title="655 Montgomery Street
+9am-11am
+April 18" rel="tooltip" style="font-size:100%;font-family:Century Gothic">655 Montgomery Street</abbr>
+
+<br />
+  <abbr title="760 Market Street
+9am-11am
+March 14, May 23, Aug 22, Nov 28" rel="tooltip" style="font-size:100%;font-family:Century Gothic">760 Market Street</abbr>
+
+<br />
+<abbr title="945 Bryant Street
+10am-12pm
+Feb 9, May 11, Aug 10, Nov 9" rel="tooltip" style="font-size:100%;font-family:Century Gothic">945 Bryant Street</abbr>
+
+<br />
+<abbr title="1455 Market Street
+9am-11am
+Jan 5, Mar 2, May 4, Jul 6, Sep 7, Nov 2" rel="tooltip" style="font-size:100%;font-family:Century Gothic">1455 Market Street</abbr>
+
+<br />
+<abbr title="6425-75 Christie Ave, Emeryvillle
+8:30am-10:30am
+Feb 8, May 8, Aug 9, Nov 6" rel="tooltip" style="font-size:100%;font-family:Century Gothic">6425-75 Christie Ave, Emeryvillle</abbr>
+
+
+</body>
+</html>
