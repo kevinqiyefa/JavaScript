@@ -433,7 +433,7 @@
 		var find_msg = document.getElementById('find_msg');
 		var current_find;
 		
-		if (findtext.highlights.length < 1) return;
+		if (findtext.highlights.length < 1){findtext.findit();}
 		
 		if (findtext.find_pointer != -1) // if not first find
 		{
