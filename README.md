@@ -1,1 +1,1 @@
-# Simple JavaScript Carousel
+# Simple JavaScript Projects
