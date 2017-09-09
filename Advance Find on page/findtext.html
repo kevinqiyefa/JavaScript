@@ -420,8 +420,10 @@
 			else 
 				current_find.style.backgroundColor = "orange";
 				
-		//findtext.highlights[find_pointer].scrollIntoView(); // Scroll to selected element
-		findtext.scrollToPosition(findtext.highlights[findtext.find_pointer]);
+		
+		findtext.highlights[findtext.find_pointer].scrollIntoView(); // 170907 Scroll to selected element
+
+		//findtext.scrollToPosition(findtext.highlights[findtext.find_pointer]);    //170907 comment
 		
 	} // end findtext.findnext()
 
@@ -463,8 +465,9 @@
 			else 
 				current_find.style.backgroundColor = "orange";
 				
-		//findtext.highlights[findtext.find_pointer].scrollIntoView(); // Scroll to selected element
-		findtext.scrollToPosition(findtext.highlights[findtext.find_pointer]);
+		findtext.highlights[findtext.find_pointer].scrollIntoView(); // 170907 Scroll to selected element
+
+		//findtext.scrollToPosition(findtext.highlights[findtext.find_pointer]);  //170907 comment
 		
 	} // end findtext.findprev()
 
