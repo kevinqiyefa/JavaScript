@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+        
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>jQuery UI Autocomplete - Custom data and display</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        
+</head>
+
+<body>
+        <div class="fluid-container text-center">
+
+                <input id="address-input" placeholder="Address">
+                <div id="address"></div>
+                <div id="time"></div>
+                <div id="date"></div>
+                <div id="addcal-text"></div>
+                <div id="add-to-calendar"></div>
+        </div>
+
+</body>
+
+<style>
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700);
+
+* {
+        font-family: 'Lato',sans-serif;
+        font-weight: 400
+}
+
+#address-input {
+        width: 90%;
+        border: 3px solid #21ce99;
+        border-radius: 0;
+        background-color: #fff;
+        background-repeat: no-repeat;
+        padding: 10px 20px 10px 45px;
+        outline: 0;
+        font-size: 18px;
+        color: #21ce99;
+        background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 56.966 56.966' style='enable-background:new 0 0 56.966 56.966;' xml:space='preserve' width='28px' height='28px' class=''><g transform='matrix(1 0 0 1 0 0)'><path d='M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z' data-original='#000000' class='active-path' data-old_color='#21ce99' fill='#21ce99'/></g> </svg>")  no-repeat;
+        background-size: 24px 24px;
+        background-position: 9px 9px
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: #21ce99;
+        opacity: 1; /* Firefox */
+}
+  
+.ui-widget.ui-widget-content{
+        border: 3px solid #21ce99;
+        border-top:none;
+        color: #21ce99;
+        font-size:16px;
+}
+
+#address{
+        padding-top:20px;
+        font-size:20px;
+        font-weight:bold;
+        color: #ee382a;
+
+}
+
+#time, #date, #addcal-text{
+  font-weight:bold;
+        font-size:18px;
+        color: #ee382a;
+}
+
+
+.addeventatc{background-color:rgba(33, 206, 153, 1); font-weight:700; border-radius:15px;}
+#add-to-calendar{display: inline-flex;}
+
+@media only screen and (max-width: 600px) {
+    #add-to-calendar {
+        display: inline-grid;
+    }
+}
+
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- AddEvent script -->
+<script src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
+
+<script>
+
+        window.addeventasync = function(){
+            addeventatc.settings({
+                appleical  : {show:true, text:"Apple Calendar"},
+                google     : {show:true, text:"Google <em>(online)</em>"},
+                outlook    : {show:true, text:"Outlook"},
+                outlookcom : {show:true, text:"Outlook.com <em>(online)</em>"},
+                yahoo      : {show:false, text:"Yahoo <em>(online)</em>"}
+            });
+        };
+
+
+        $( function() {
+                var projects = [     
+{label:"300 California Street", time:"9 am to 12 noon", date:"Tuesday Feb 6th, April 3rd, June 5th, Aug 7th, Oct 2nd, Dec 4th", dates: ["Feb 6th", "April 3rd", "June 5th", "Aug 7th", "Oct 2nd", "Dec 4th"], start:["06-02-2018 09:00", "03-04-2018 09:00","05-06-2018 09:00", "07-08-2018 09:00", "02-10-2018 09:00", "04-12-2018 09:00"], end: ["06-02-2018 12:00", "03-04-2018 12:00","05-06-2018 12:00", "07-08-2018 12:00", "02-10-2018 12:00", "04-12-2018 12:00"], timezone: "America/Los_Angeles", title: "title of the event", description: "Description of the event", location: "300 California St, San Francisco, CA 94104"}
+   ];
+                
+                $( "#address-input" ).autocomplete({
+                        minLength: 1,
+                        source: projects,
+                        focus: function( event, ui ) {
+                                $( "#address-input" ).val( ui.item.label );
+                                return false;
+                        },
+                        select: function( event, ui ) {
+                                $( "#address-input" ).val( ui.item.label );
+                                $( "#address" ).html( ui.item.label );
+                                $( "#time" ).html( ui.item.time + " on these days:<br>");
+                                $( "#date" ).html( ui.item.date );
+                                $( "#addcal-text" ).html('<br><div>Add to Calendar:</div>');
+                                setTimeout(function(){addeventatc.refresh();}, 200);
+                                for(var i=0; i < ui.item.start.length; i++){
+                                    $( "#add-to-calendar" ).append('<div title="Add to Calendar" class="addeventatc">'+ ui.item.dates[i]+'<span class="start">'+ ui.item.start[i] +'</span><span class="end">'+ ui.item.end[i] +'</span><span class="timezone">'+ ui.item.timezone +'</span><span class="title">eWasteSF Pickup Day</span><span class="description">Description of the event</span><span class="location">'+ ui.item.location +'</span></div>');
+                                
+                                }
+                                
+                                
+                                
+                                return false;
+                        },
+      response: function (event, ui) {
+        var inputLen = $("#address-input").val().length;
+            var len = ui.content.length;
+        if ( inputLen > 0 && len < 1 ){
+            $('#address, #time, #date, #add-to-calendar').empty();
+            $('#address').html('Seems like we do not have your address.<br>Use <a href="https://ewastesf.myshopify.com/pages/businesspu"><u>Regular Business Pick Up</u></a> & <a href="mailto:pickup@ewastesf.com"><u>Contact us</u></a> to set up your building.');
+        }
+      }
+                })
+                .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                        return $( "<li>" )
+                        .append( "<div>" + item.label + "</div>" )
+                        .appendTo( ul );
+                };
+        } );
+</script>
+</html>
